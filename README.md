@@ -55,9 +55,11 @@ pnpm run verify    # 构建 + 类型检查 + 测试 + 客户端声明门禁
 pnpm run check:sync   # 拉对端仓库逐文件比对；分叉即失败并列出文件名
 ```
 
+守卫比对 `packages/contracts`、`packages/group-chat`，以及两个仓库共用的主设计记录 `docs/`。
+
 `tools/sync-guard.yml` 是同一脚本的 CI 版本，**目前在仓库里但尚未生效**——本机 `gh` 的 OAuth token 没有 `workflow` 权限，GitHub 拒绝创建 `.github/workflows/*`。要启用：`gh auth refresh -s workflow`，然后把该文件移到 `.github/workflows/sync-guard.yml`。在启用之前，守卫只在手动跑时生效。
 
-改共享包的顺序是：**在这里改 → 同步到 `dsh-sillytavern` → 两边都推**。
+改共享内容的顺序是：**在这里改 → 推 → 同步到 `dsh-sillytavern` → 再推**（先推权威仓库，守卫才会在对端变绿）。
 
 需要 Node 24+ 与 pnpm 12+，以及 PATH 上有一个 `dsh`（或设 `DSH_INSTALL_DIR`）。平台包是 peer，从不安装。
 
