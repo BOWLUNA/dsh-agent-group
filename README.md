@@ -47,6 +47,18 @@ pnpm install
 pnpm run verify    # 构建 + 类型检查 + 测试 + 客户端声明门禁
 ```
 
+## 共享包：本仓库是权威副本
+
+`packages/contracts` 与 `packages/group-chat` 在 [`dsh-sillytavern`](https://github.com/BOWLUNA/dsh-sillytavern) 里也各存了一份副本——群聊包发布到 npm 之前，那边必须能独立安装与构建。**本仓库里的这两份是正式的**，两边必须逐字节相同。
+
+```sh
+pnpm run check:sync   # 拉对端仓库逐文件比对；分叉即失败并列出文件名
+```
+
+`tools/sync-guard.yml` 是同一脚本的 CI 版本，**目前在仓库里但尚未生效**——本机 `gh` 的 OAuth token 没有 `workflow` 权限，GitHub 拒绝创建 `.github/workflows/*`。要启用：`gh auth refresh -s workflow`，然后把该文件移到 `.github/workflows/sync-guard.yml`。在启用之前，守卫只在手动跑时生效。
+
+改共享包的顺序是：**在这里改 → 同步到 `dsh-sillytavern` → 两边都推**。
+
 需要 Node 24+ 与 pnpm 12+，以及 PATH 上有一个 `dsh`（或设 `DSH_INSTALL_DIR`）。平台包是 peer，从不安装。
 
 ## 设计记录
